@@ -51,7 +51,7 @@
             box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
         }
         
-        /* Header */
+        /* Header with menu */
         .header-area {
             padding: 12px 16px;
             display: flex;
@@ -61,6 +61,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             flex-shrink: 0;
             height: 56px;
+            position: relative;
         }
         
         .header-title {
@@ -70,7 +71,7 @@
             letter-spacing: 0.5px;
         }
         
-        .menu-dots-btn {
+        .menu-three-dots {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -81,17 +82,60 @@
             justify-content: center;
             cursor: pointer;
             color: #a0a5b0;
-            font-size: 18px;
+            font-size: 20px;
             transition: all 0.2s ease;
             -webkit-user-select: none;
             user-select: none;
             padding: 0;
             margin: 0;
+            position: relative;
         }
         
-        .menu-dots-btn:active {
+        .menu-three-dots:active {
             background: rgba(255, 255, 255, 0.12);
             transform: scale(0.95);
+        }
+        
+        /* Dropdown Menu */
+        .menu-dropdown {
+            position: absolute;
+            top: 48px;
+            right: 0;
+            background: rgba(20, 30, 50, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            min-width: 180px;
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+        
+        .menu-dropdown.active {
+            display: flex;
+        }
+        
+        .menu-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #a0a5b0;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .menu-item:active {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
         }
         
         /* Main content area - welcome screen */
@@ -147,7 +191,7 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 15px;
+            padding: 12px;
             display: none;
             color: white;
             width: 100%;
@@ -205,12 +249,12 @@
             color: #60a5fa;
         }
         
-        /* Footer - Input area */
+        /* Footer - Input area - INSIDE SCREEN */
         .footer-area {
             padding: 12px;
             width: 100%;
             flex-shrink: 0;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.15);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
         
@@ -279,6 +323,93 @@
         .send-pill:active {
             background: #16a34a;
             transform: scale(0.95);
+        }
+        
+        /* History Modal */
+        #historyOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1001;
+            padding: 20px;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .history-modal {
+            background: rgba(20, 30, 50, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 340px;
+            backdrop-filter: blur(20px);
+            margin-top: 20px;
+        }
+        
+        .history-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #a0a5b0;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .history-item:active {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+        
+        .history-empty {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 20px;
+            font-size: 13px;
+        }
+        
+        .history-close-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .history-close-btn:active {
+            background: rgba(255, 255, 255, 0.15);
         }
         
         /* Settings Modal */
@@ -398,7 +529,14 @@
     <div class="mobile-app-frame">
         <header class="header-area">
             <span class="header-title">Quantarion</span>
-            <button class="menu-dots-btn" onclick="openSettings()">⚙️</button>
+            <div style="position: relative;">
+                <button class="menu-three-dots" onclick="toggleMenu()">⋮</button>
+                <div class="menu-dropdown" id="menuDropdown">
+                    <div class="menu-item" onclick="newChat()">➕ New Chat</div>
+                    <div class="menu-item" onclick="openHistory()">📋 Chat History</div>
+                    <div class="menu-item" onclick="openSettings()">⚙️ Settings</div>
+                </div>
+            </div>
         </header>
 
         <main class="center-stage" id="welcomeScreen">
@@ -419,6 +557,18 @@
         </footer>
     </div>
 
+    <!-- History Modal -->
+    <div id="historyOverlay" onclick="if(event.target === this) closeHistory()">
+        <div class="history-modal">
+            <h2 class="history-title">📋 Chat History</h2>
+            <div class="history-list" id="historyList">
+                <div class="history-empty">No chat history yet</div>
+            </div>
+            <button class="history-close-btn" onclick="closeHistory()">Close</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
     <div id="settingsOverlay" onclick="if(event.target === this) closeSettings()">
         <div class="settings-modal">
             <h2 class="settings-title">⚙️ Settings</h2>
@@ -432,6 +582,9 @@
     </div>
 
     <script>
+        let currentChatId = null;
+        let allChats = {};
+
         // Mobile-first initialization
         window.addEventListener('load', () => {
             // Load saved settings
@@ -439,6 +592,12 @@
             const savedModel = localStorage.getItem('q_model');
             if(savedKey) document.getElementById('apiKey').value = savedKey;
             if(savedModel) document.getElementById('modelName').value = savedModel;
+            
+            // Load chat history
+            const savedChats = localStorage.getItem('q_chats');
+            if(savedChats) {
+                allChats = JSON.parse(savedChats);
+            }
             
             // Enter key to send
             document.getElementById('aiInput').addEventListener('keypress', (e) => {
@@ -448,16 +607,85 @@
                 }
             });
         });
-        
+
+        function toggleMenu() {
+            const menu = document.getElementById('menuDropdown');
+            menu.classList.toggle('active');
+        }
+
+        function closeMenuAndOverlay() {
+            document.getElementById('menuDropdown').classList.remove('active');
+        }
+
+        function newChat() {
+            closeMenuAndOverlay();
+            currentChatId = Date.now().toString();
+            allChats[currentChatId] = { messages: [], timestamp: new Date().toLocaleString() };
+            document.getElementById('welcomeScreen').style.display = 'flex';
+            document.getElementById('chatDisplay').style.display = 'none';
+            document.getElementById('chatDisplay').innerHTML = '';
+            document.getElementById('aiInput').value = '';
+            document.getElementById('aiInput').focus();
+        }
+
+        function openHistory() {
+            closeMenuAndOverlay();
+            document.getElementById('historyOverlay').style.display = 'flex';
+            updateHistoryList();
+        }
+
+        function closeHistory() {
+            document.getElementById('historyOverlay').style.display = 'none';
+        }
+
+        function updateHistoryList() {
+            const historyList = document.getElementById('historyList');
+            if(Object.keys(allChats).length === 0) {
+                historyList.innerHTML = '<div class="history-empty">No chat history yet</div>';
+                return;
+            }
+
+            historyList.innerHTML = Object.entries(allChats)
+                .sort((a, b) => parseInt(b[0]) - parseInt(a[0]))
+                .map(([id, chat]) => `
+                    <div class="history-item" onclick="loadChat('${id}')">
+                        ${chat.messages[0]?.content?.substring(0, 40) || 'Empty Chat'} - ${chat.timestamp}
+                    </div>
+                `).join('');
+        }
+
+        function loadChat(chatId) {
+            currentChatId = chatId;
+            const chat = allChats[chatId];
+            
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('chatDisplay').style.display = 'block';
+            document.getElementById('chatDisplay').innerHTML = '';
+
+            // Reload all messages
+            chat.messages.forEach(msg => {
+                const msgEl = document.createElement('div');
+                msgEl.className = `chat-msg ${msg.role === 'user' ? 'user-msg' : 'ai-msg'}`;
+                msgEl.textContent = (msg.role === 'user' ? 'You: ' : '🤖 Quantarion: ') + msg.content;
+                document.getElementById('chatDisplay').appendChild(msgEl);
+            });
+
+            document.getElementById('chatDisplay').scrollTop = document.getElementById('chatDisplay').scrollHeight;
+            document.getElementById('aiInput').value = '';
+            document.getElementById('aiInput').focus();
+            closeHistory();
+        }
+
         function openSettings() {
+            closeMenuAndOverlay();
             document.getElementById('settingsOverlay').style.display = 'flex';
             document.getElementById('apiKey').focus();
         }
-        
+
         function closeSettings() {
             document.getElementById('settingsOverlay').style.display = 'none';
         }
-        
+
         function saveSettings() {
             const key = document.getElementById('apiKey').value;
             const model = document.getElementById('modelName').value;
@@ -472,7 +700,7 @@
             closeSettings();
             alert('Settings saved!');
         }
-        
+
         async function sendMessage() {
             const input = document.getElementById('aiInput');
             const text = input.value.trim();
@@ -485,6 +713,12 @@
                 openSettings();
                 return;
             }
+
+            // Create new chat if none exists
+            if(!currentChatId) {
+                currentChatId = Date.now().toString();
+                allChats[currentChatId] = { messages: [], timestamp: new Date().toLocaleString() };
+            }
             
             // Show welcome screen once
             document.getElementById('welcomeScreen').style.display = 'none';
@@ -496,6 +730,8 @@
             userMsg.className = 'chat-msg user-msg';
             userMsg.textContent = 'You: ' + text;
             chatDisplay.appendChild(userMsg);
+            
+            allChats[currentChatId].messages.push({ role: 'user', content: text });
             
             input.value = '';
             chatDisplay.scrollTop = chatDisplay.scrollHeight;
@@ -527,17 +763,29 @@
                     throw new Error(data.error?.message || 'Invalid response');
                 }
                 
-                aiMsg.innerHTML = '🤖 Quantarion: ' + data.choices[0].message.content;
+                const response = data.choices[0].message.content;
+                aiMsg.innerHTML = '🤖 Quantarion: ' + response;
+                allChats[currentChatId].messages.push({ role: 'assistant', content: response });
                 
             } catch(error) {
                 aiMsg.innerHTML = '❌ Error: ' + (error.message || 'Failed to get response');
                 console.error('Error:', error);
             }
             
+            // Save chat history
+            localStorage.setItem('q_chats', JSON.stringify(allChats));
+            
             chatDisplay.scrollTop = chatDisplay.scrollHeight;
             input.focus();
         }
         
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.menu-three-dots') && !e.target.closest('.menu-dropdown')) {
+                closeMenuAndOverlay();
+            }
+        });
+
         // Prevent double-tap zoom
         document.addEventListener('touchmove', (e) => {
             if (e.touches.length > 1) {
