@@ -2,74 +2,91 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Quantarion AI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #0b1016; color: white; height: 100vh; overflow: hidden; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #0b1016; display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw; overflow: hidden; }
+        
+        .mobile-app-frame { width: 100%; max-width: 400px; height: 100%; background: radial-gradient(circle at center 35%, #1c2533 0%, #0d121a 100%); display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .header-area { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .menu-dots-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #a0a5b0; }
+        
+        .center-stage { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 20px; margin-top: -30px; }
+        .black-outline-logo { width: 130px; margin-bottom: 25px; mix-blend-mode: multiply; opacity: 0.75; }
+        .main-title { font-size: 20px; color: #ffffff; margin-bottom: 6px; }
+        
+        #chatDisplay { flex: 1; overflow-y: auto; padding: 20px; display: none; color: white; width: 100%; }
+        .chat-msg { padding: 10px; border-radius: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.05); }
+
+        .footer-area { padding: 0 15px 25px 15px; width: 100%; }
+        .chat-pill-container { background: rgba(40, 50, 70, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 40px; padding: 6px; display: flex; align-items: center; gap: 8px; }
+        .input-inner-box { flex: 1; height: 44px; background: rgba(0, 0, 0, 0.3); border-radius: 30px; display: flex; align-items: center; padding: 0 12px; }
+        .input-inner-box input { flex: 1; background: transparent; border: none; color: white; padding: 0 10px; outline: none; }
+        .send-pill { height: 44px; padding: 0 20px; background: #22c55e; border-radius: 30px; color: black; font-weight: bold; cursor: pointer; border: none; }
+
+        /* Settings Modal */
+        #settingsOverlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; padding: 20px; flex-direction: column; justify-content: center; }
     </style>
 </head>
-<body class="flex flex-col h-full">
+<body>
 
-    <header class="p-4 flex justify-between items-center glass">
-        <h1 class="text-green-400 font-bold">Quantarion V1.0</h1>
-        <button id="settingsBtn" class="p-2">⚙️</button>
-    </header>
+    <div class="mobile-app-frame">
+        <header class="header-area">
+            <button class="menu-dots-btn" onclick="document.getElementById('settingsOverlay').style.display='flex'">⚙️</button>
+        </header>
 
-    <div id="chatArea" class="flex-1 overflow-y-auto p-4 space-y-4">
-        <div class="text-center text-gray-500 mt-10">Quantarion Ready. Send a command.</div>
+        <main class="center-stage" id="welcomeScreen">
+            <img src="https://i.ibb.co/zVHRTfTF/1776703207500-1.jpg" class="black-outline-logo">
+            <h1 class="main-title">Welcome to <strong>Quantarion</strong> V1.0.</h1>
+        </main>
+        <div id="chatDisplay"></div>
+
+        <footer class="footer-area">
+            <div class="chat-pill-container">
+                <div class="input-inner-box">
+                    <input type="text" id="aiInput" placeholder="Type command...">
+                </div>
+                <button class="send-pill" id="sendBtn">Send</button>
+            </div>
+        </footer>
     </div>
 
-    <footer class="p-4 glass">
-        <div class="flex gap-2">
-            <input id="userInput" type="text" placeholder="Type here..." class="flex-1 bg-black p-3 rounded-full border border-gray-700 outline-none">
-            <button id="sendBtn" class="bg-green-600 px-6 rounded-full font-bold">Send</button>
-        </div>
-    </footer>
+    <div id="settingsOverlay">
+        <input type="password" id="apiKey" placeholder="OpenRouter API Key" style="padding:15px; margin-bottom:10px; border-radius:10px;">
+        <input type="text" id="modelName" value="deepseek/deepseek-r1:free" style="padding:15px; margin-bottom:10px; border-radius:10px;">
+        <button onclick="saveSettings()" style="padding:15px; background:#22c55e; border-radius:10px; cursor:pointer;">Save & Close</button>
+    </div>
 
     <script>
-        const chatArea = document.getElementById('chatArea');
-        const input = document.getElementById('userInput');
-        
-        // 1. Settings (API Key Save)
-        document.getElementById('settingsBtn').onclick = () => {
-            const key = prompt("Enter OpenRouter API Key:", localStorage.getItem('q_key') || "");
-            if(key) localStorage.setItem('q_key', key);
-        };
+        function saveSettings() {
+            localStorage.setItem('q_key', document.getElementById('apiKey').value);
+            localStorage.setItem('q_model', document.getElementById('modelName').value);
+            document.getElementById('settingsOverlay').style.display = 'none';
+        }
 
-        // 2. Send Message Logic
         document.getElementById('sendBtn').onclick = async () => {
-            const text = input.value;
-            if(!text) return;
+            const input = document.getElementById('aiInput');
             const key = localStorage.getItem('q_key');
-            if(!key) return alert("Please set API Key first!");
+            if(!key) return alert("Security: Set API Key in Settings!");
+            
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('chatDisplay').style.display = 'block';
+            document.getElementById('chatDisplay').innerHTML += `<div class="chat-msg">User: ${input.value}</div>`;
 
-            chatArea.innerHTML += `<div class="bg-green-900 p-3 rounded-xl self-end ml-auto max-w-[80%]">${text}</div>`;
-            input.value = "";
-
-            const aiResponseDiv = document.createElement('div');
-            aiResponseDiv.className = "bg-gray-800 p-3 rounded-xl max-w-[80%]";
-            chatArea.appendChild(aiResponseDiv);
-
-            const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                 method: "POST",
                 headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    model: "deepseek/deepseek-r1:free",
-                    messages: [{role: "user", content: text}],
-                    stream: true
+                    model: localStorage.getItem('q_model') || "deepseek/deepseek-r1:free",
+                    messages: [{role: "user", content: input.value}],
+                    stream: false
                 })
             });
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            while(true) {
-                const {done, value} = await reader.read();
-                if(done) break;
-                const chunk = decoder.decode(value);
-                aiResponseDiv.innerHTML += chunk.replace(/data: /g, "").split('"content":"')[1]?.split('"')[0] || "";
-            }
+            const data = await res.json();
+            document.getElementById('chatDisplay').innerHTML += `<div class="chat-msg" style="color:#22c55e">Quantarion: ${data.choices[0].message.content}</div>`;
+            input.value = "";
         };
     </script>
 </body>
