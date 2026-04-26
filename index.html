@@ -2,45 +2,451 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>Quantarion AI</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: #0b1016; display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw; overflow: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         
-        .mobile-app-frame { width: 100%; max-width: 400px; height: 100%; background: radial-gradient(circle at center 35%, #1c2533 0%, #0d121a 100%); display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
-        .header-area { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .menu-dots-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #a0a5b0; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
         
-        .center-stage { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 20px; margin-top: -30px; }
-        .black-outline-logo { width: 130px; margin-bottom: 25px; mix-blend-mode: multiply; opacity: 0.75; }
-        .main-title { font-size: 20px; color: #ffffff; margin-bottom: 6px; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #0b1016;
+        }
         
-        #chatDisplay { flex: 1; overflow-y: auto; padding: 20px; display: none; color: white; width: 100%; }
-        .chat-msg { padding: 10px; border-radius: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.05); }
-
-        .footer-area { padding: 0 15px 25px 15px; width: 100%; }
-        .chat-pill-container { background: rgba(40, 50, 70, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 40px; padding: 6px; display: flex; align-items: center; gap: 8px; }
-        .input-inner-box { flex: 1; height: 44px; background: rgba(0, 0, 0, 0.3); border-radius: 30px; display: flex; align-items: center; padding: 0 12px; }
-        .input-inner-box input { flex: 1; background: transparent; border: none; color: white; padding: 0 10px; outline: none; }
-        .send-pill { height: 44px; padding: 0 20px; background: #22c55e; border-radius: 30px; color: black; font-weight: bold; cursor: pointer; border: none; }
-
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        /* Bilkul Phone Ka Size - 360x800px jaise smartphones */
+        .mobile-app-frame {
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100%;
+            background: linear-gradient(135deg, #0d121a 0%, #1c2533 50%, #0b1016 100%);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+        }
+        
+        /* Status bar jaisa header */
+        .header-area {
+            padding: max(10px, env(safe-area-inset-top)) 20px 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+            height: auto;
+            min-height: 56px;
+        }
+        
+        .header-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #a0a5b0;
+            letter-spacing: 0.5px;
+        }
+        
+        .menu-dots-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #a0a5b0;
+            font-size: 20px;
+            transition: all 0.2s ease;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        .menu-dots-btn:active {
+            background: rgba(255, 255, 255, 0.12);
+            transform: scale(0.95);
+        }
+        
+        /* Center stage - welcome screen */
+        .center-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .black-outline-logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 30px;
+            opacity: 0.85;
+            animation: fadeInScale 0.8s ease-out;
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 0.85;
+                transform: scale(1);
+            }
+        }
+        
+        .main-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        .main-subtitle {
+            font-size: 14px;
+            color: #a0a5b0;
+            margin-bottom: 30px;
+            letter-spacing: 0.3px;
+        }
+        
+        /* Chat display area */
+        #chatDisplay {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 20px;
+            display: none;
+            color: white;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+        
+        #chatDisplay::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #chatDisplay::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        #chatDisplay::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        
+        .chat-msg {
+            padding: 12px 14px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            word-wrap: break-word;
+            line-height: 1.4;
+            font-size: 14px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .chat-msg.user-msg {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(34, 197, 94, 0.3);
+            margin-left: auto;
+            max-width: 85%;
+        }
+        
+        .chat-msg.ai-msg {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+        
+        /* Footer - Input area */
+        .footer-area {
+            padding: 15px;
+            width: 100%;
+            padding-bottom: max(15px, env(safe-area-inset-bottom));
+            flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .chat-pill-container {
+            background: rgba(40, 50, 70, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 8px 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .input-inner-box {
+            flex: 1;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+        }
+        
+        .input-inner-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 0 8px;
+            outline: none;
+            font-size: 15px;
+            line-height: 1.4;
+            min-height: 44px;
+        }
+        
+        .input-inner-box input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .input-inner-box input:focus::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+        
+        .send-pill {
+            height: 44px;
+            width: 44px;
+            min-width: 44px;
+            background: #22c55e;
+            border-radius: 30px;
+            color: #000;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.2s ease;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        .send-pill:active {
+            background: #16a34a;
+            transform: scale(0.95);
+        }
+        
         /* Settings Modal */
-        #settingsOverlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; padding: 20px; flex-direction: column; justify-content: center; }
+        #settingsOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            padding: 20px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .settings-modal {
+            background: rgba(20, 30, 50, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px 20px;
+            width: 100%;
+            max-width: 380px;
+            backdrop-filter: blur(20px);
+        }
+        
+        .settings-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .settings-modal input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        
+        .settings-modal input:focus {
+            background: rgba(0, 0, 0, 0.5);
+            border-color: rgba(34, 197, 94, 0.5);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+        }
+        
+        .settings-modal input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .settings-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .settings-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        .settings-btn.save {
+            background: #22c55e;
+            color: black;
+        }
+        
+        .settings-btn.save:active {
+            background: #16a34a;
+            transform: scale(0.98);
+        }
+        
+        .settings-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .settings-btn.cancel:active {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0.98);
+        }
+        
+        /* Loading indicator */
+        .loading {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse 1.5s infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Responsive untuk different screen sizes */
+        @media (max-height: 600px) {
+            .main-title {
+                font-size: 20px;
+                margin-bottom: 8px;
+            }
+            .black-outline-logo {
+                width: 100px;
+                margin-bottom: 15px;
+            }
+            .center-stage {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .header-area {
+                padding-top: max(8px, env(safe-area-inset-top));
+            }
+            .menu-dots-btn {
+                width: 40px;
+                height: 40px;
+            }
+            .main-title {
+                font-size: 22px;
+            }
+            .chat-pill-container {
+                padding: 6px 6px;
+            }
+            .send-pill {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
-
     <div class="mobile-app-frame">
         <header class="header-area">
-            <button class="menu-dots-btn" onclick="document.getElementById('settingsOverlay').style.display='flex'">⚙️</button>
+            <span class="header-title">Quantarion</span>
+            <button class="menu-dots-btn" onclick="openSettings()">⚙️</button>
         </header>
 
         <main class="center-stage" id="welcomeScreen">
-            <img src="https://i.ibb.co/zVHRTfTF/1776703207500-1.jpg" class="black-outline-logo">
-            <h1 class="main-title">Welcome to <strong>Quantarion</strong> V1.0.</h1>
+            <img src="https://i.ibb.co/zVHRTfTF/1776703207500-1.jpg" class="black-outline-logo" alt="Quantarion Logo">
+            <h1 class="main-title">Welcome to<br><strong>Quantarion</strong> V1.0</h1>
+            <p class="main-subtitle">AI at your fingertips</p>
         </main>
+        
         <div id="chatDisplay"></div>
 
         <footer class="footer-area">
@@ -48,46 +454,139 @@
                 <div class="input-inner-box">
                     <input type="text" id="aiInput" placeholder="Type command...">
                 </div>
-                <button class="send-pill" id="sendBtn">Send</button>
+                <button class="send-pill" id="sendBtn" onclick="sendMessage()">↑</button>
             </div>
         </footer>
     </div>
 
-    <div id="settingsOverlay">
-        <input type="password" id="apiKey" placeholder="OpenRouter API Key" style="padding:15px; margin-bottom:10px; border-radius:10px;">
-        <input type="text" id="modelName" value="deepseek/deepseek-r1:free" style="padding:15px; margin-bottom:10px; border-radius:10px;">
-        <button onclick="saveSettings()" style="padding:15px; background:#22c55e; border-radius:10px; cursor:pointer;">Save & Close</button>
+    <div id="settingsOverlay" onclick="if(event.target === this) closeSettings()">
+        <div class="settings-modal">
+            <h2 class="settings-title">⚙️ Settings</h2>
+            <input type="password" id="apiKey" placeholder="OpenRouter API Key">
+            <input type="text" id="modelName" value="deepseek/deepseek-r1:free" placeholder="Model name">
+            <div class="settings-buttons">
+                <button class="settings-btn cancel" onclick="closeSettings()">Cancel</button>
+                <button class="settings-btn save" onclick="saveSettings()">Save</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        function saveSettings() {
-            localStorage.setItem('q_key', document.getElementById('apiKey').value);
-            localStorage.setItem('q_model', document.getElementById('modelName').value);
+        // Mobile-first initialization
+        window.addEventListener('load', () => {
+            document.body.style.height = '100vh';
+            document.body.style.width = '100vw';
+            
+            // Load saved settings
+            const savedKey = localStorage.getItem('q_key');
+            const savedModel = localStorage.getItem('q_model');
+            if(savedKey) document.getElementById('apiKey').value = savedKey;
+            if(savedModel) document.getElementById('modelName').value = savedModel;
+            
+            // Enter key to send
+            document.getElementById('aiInput').addEventListener('keypress', (e) => {
+                if(e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        });
+        
+        function openSettings() {
+            document.getElementById('settingsOverlay').style.display = 'flex';
+            document.getElementById('apiKey').focus();
+        }
+        
+        function closeSettings() {
             document.getElementById('settingsOverlay').style.display = 'none';
         }
-
-        document.getElementById('sendBtn').onclick = async () => {
-            const input = document.getElementById('aiInput');
-            const key = localStorage.getItem('q_key');
-            if(!key) return alert("Security: Set API Key in Settings!");
+        
+        function saveSettings() {
+            const key = document.getElementById('apiKey').value;
+            const model = document.getElementById('modelName').value;
             
+            if(!key.trim()) {
+                alert('Please enter API Key!');
+                return;
+            }
+            
+            localStorage.setItem('q_key', key);
+            localStorage.setItem('q_model', model);
+            closeSettings();
+            alert('Settings saved!');
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('aiInput');
+            const text = input.value.trim();
+            
+            if(!text) return;
+            
+            const key = localStorage.getItem('q_key');
+            if(!key) {
+                alert('⚠️ Security: Set API Key in Settings first!');
+                openSettings();
+                return;
+            }
+            
+            // Show welcome screen once
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('chatDisplay').style.display = 'block';
-            document.getElementById('chatDisplay').innerHTML += `<div class="chat-msg">User: ${input.value}</div>`;
-
-            const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                method: "POST",
-                headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    model: localStorage.getItem('q_model') || "deepseek/deepseek-r1:free",
-                    messages: [{role: "user", content: input.value}],
-                    stream: false
-                })
-            });
-            const data = await res.json();
-            document.getElementById('chatDisplay').innerHTML += `<div class="chat-msg" style="color:#22c55e">Quantarion: ${data.choices[0].message.content}</div>`;
-            input.value = "";
-        };
+            
+            // Add user message
+            const chatDisplay = document.getElementById('chatDisplay');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-msg user-msg';
+            userMsg.textContent = 'You: ' + text;
+            chatDisplay.appendChild(userMsg);
+            
+            input.value = '';
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            
+            // Show loading
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'chat-msg ai-msg';
+            aiMsg.innerHTML = '<span class="loading"></span>Quantarion thinking...';
+            chatDisplay.appendChild(aiMsg);
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            
+            try {
+                const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${key}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: localStorage.getItem('q_model') || "deepseek/deepseek-r1:free",
+                        messages: [{role: "user", content: text}],
+                        stream: false
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if(!data.choices || !data.choices[0] || !data.choices[0].message) {
+                    throw new Error(data.error?.message || 'Invalid response');
+                }
+                
+                aiMsg.innerHTML = '🤖 Quantarion: ' + data.choices[0].message.content;
+                
+            } catch(error) {
+                aiMsg.innerHTML = '❌ Error: ' + (error.message || 'Failed to get response');
+                console.error('Error:', error);
+            }
+            
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            input.focus();
+        }
+        
+        // Prevent double-tap zoom
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
