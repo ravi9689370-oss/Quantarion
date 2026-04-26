@@ -26,50 +26,41 @@
             padding: 0;
             overflow: hidden;
             background: #0b1016;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
         
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
-            margin: 0;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-        }
-        
-        /* Bilkul Phone Ka Size - 360x800px jaise smartphones */
-        .mobile-app-frame {
             width: 100vw;
             height: 100vh;
-            max-width: 100%;
-            max-height: 100%;
+            overflow: hidden;
+        }
+        
+        .mobile-app-frame {
+            width: 100%;
+            height: 100%;
             background: linear-gradient(135deg, #0d121a 0%, #1c2533 50%, #0b1016 100%);
             display: flex;
             flex-direction: column;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
             overflow: hidden;
             box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
         }
         
-        /* Status bar jaisa header */
+        /* Header */
         .header-area {
-            padding: max(10px, env(safe-area-inset-top)) 20px 15px 20px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: rgba(0, 0, 0, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             flex-shrink: 0;
-            height: auto;
-            min-height: 56px;
+            height: 56px;
         }
         
         .header-title {
@@ -83,17 +74,19 @@
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             color: #a0a5b0;
-            font-size: 20px;
+            font-size: 18px;
             transition: all 0.2s ease;
             -webkit-user-select: none;
             user-select: none;
+            padding: 0;
+            margin: 0;
         }
         
         .menu-dots-btn:active {
@@ -101,23 +94,24 @@
             transform: scale(0.95);
         }
         
-        /* Center stage - welcome screen */
+        /* Main content area - welcome screen */
         .center-stage {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 40px 20px;
+            padding: 20px;
             flex: 1;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            min-height: 0;
         }
         
         .black-outline-logo {
-            width: 120px;
+            width: 100px;
             height: auto;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             opacity: 0.85;
             animation: fadeInScale 0.8s ease-out;
         }
@@ -134,17 +128,17 @@
         }
         
         .main-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             line-height: 1.3;
         }
         
         .main-subtitle {
-            font-size: 14px;
+            font-size: 13px;
             color: #a0a5b0;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             letter-spacing: 0.3px;
         }
         
@@ -153,16 +147,17 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 20px;
+            padding: 15px;
             display: none;
             color: white;
             width: 100%;
             -webkit-overflow-scrolling: touch;
             scroll-behavior: smooth;
+            min-height: 0;
         }
         
         #chatDisplay::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
         }
         
         #chatDisplay::-webkit-scrollbar-track {
@@ -175,14 +170,14 @@
         }
         
         .chat-msg {
-            padding: 12px 14px;
-            border-radius: 14px;
-            margin-bottom: 12px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.08);
             word-wrap: break-word;
             line-height: 1.4;
-            font-size: 14px;
+            font-size: 13px;
             animation: slideIn 0.3s ease-out;
         }
         
@@ -212,9 +207,8 @@
         
         /* Footer - Input area */
         .footer-area {
-            padding: 15px;
+            padding: 12px;
             width: 100%;
-            padding-bottom: max(15px, env(safe-area-inset-bottom));
             flex-shrink: 0;
             background: rgba(0, 0, 0, 0.1);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -224,21 +218,21 @@
             background: rgba(40, 50, 70, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 50px;
-            padding: 8px 8px;
+            padding: 6px 6px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             backdrop-filter: blur(10px);
         }
         
         .input-inner-box {
             flex: 1;
-            height: 44px;
+            height: 40px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 30px;
             display: flex;
             align-items: center;
-            padding: 0 14px;
+            padding: 0 12px;
         }
         
         .input-inner-box input {
@@ -246,11 +240,11 @@
             background: transparent;
             border: none;
             color: white;
-            padding: 0 8px;
+            padding: 0 6px;
             outline: none;
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.4;
-            min-height: 44px;
+            min-height: 40px;
         }
         
         .input-inner-box input::placeholder {
@@ -262,9 +256,9 @@
         }
         
         .send-pill {
-            height: 44px;
-            width: 44px;
-            min-width: 44px;
+            height: 40px;
+            width: 40px;
+            min-width: 40px;
             background: #22c55e;
             border-radius: 30px;
             color: #000;
@@ -274,10 +268,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             transition: all 0.2s ease;
             -webkit-user-select: none;
             user-select: none;
+            padding: 0;
+            margin: 0;
         }
         
         .send-pill:active {
@@ -304,29 +300,29 @@
             background: rgba(20, 30, 50, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            padding: 30px 20px;
+            padding: 25px 20px;
             width: 100%;
-            max-width: 380px;
+            max-width: 340px;
             backdrop-filter: blur(20px);
         }
         
         .settings-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: white;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             text-align: center;
         }
         
         .settings-modal input {
             width: 100%;
-            padding: 14px;
-            margin-bottom: 12px;
-            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(0, 0, 0, 0.3);
             color: white;
-            font-size: 15px;
+            font-size: 14px;
             outline: none;
             transition: all 0.2s ease;
         }
@@ -343,16 +339,16 @@
         
         .settings-buttons {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 16px;
         }
         
         .settings-btn {
             flex: 1;
-            padding: 14px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 10px;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
             border: none;
             transition: all 0.2s ease;
@@ -384,53 +380,17 @@
         /* Loading indicator */
         .loading {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: #22c55e;
             animation: pulse 1.5s infinite;
-            margin-right: 8px;
+            margin-right: 6px;
         }
         
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
-        }
-        
-        /* Responsive untuk different screen sizes */
-        @media (max-height: 600px) {
-            .main-title {
-                font-size: 20px;
-                margin-bottom: 8px;
-            }
-            .black-outline-logo {
-                width: 100px;
-                margin-bottom: 15px;
-            }
-            .center-stage {
-                padding: 20px;
-            }
-        }
-        
-        @media (max-width: 360px) {
-            .header-area {
-                padding-top: max(8px, env(safe-area-inset-top));
-            }
-            .menu-dots-btn {
-                width: 40px;
-                height: 40px;
-            }
-            .main-title {
-                font-size: 22px;
-            }
-            .chat-pill-container {
-                padding: 6px 6px;
-            }
-            .send-pill {
-                width: 40px;
-                height: 40px;
-                font-size: 18px;
-            }
         }
     </style>
 </head>
@@ -474,9 +434,6 @@
     <script>
         // Mobile-first initialization
         window.addEventListener('load', () => {
-            document.body.style.height = '100vh';
-            document.body.style.width = '100vw';
-            
             // Load saved settings
             const savedKey = localStorage.getItem('q_key');
             const savedModel = localStorage.getItem('q_model');
